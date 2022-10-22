@@ -8,10 +8,13 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <main class="container">
+    <main>
       <section class="search">
         <h1>Filmes Populares</h1>
-        <input type="text" placeholder="Digite alguem filme para pesquisar" />
+        <div class="input-container">
+          <input type="text" placeholder="Digite alguem filme para pesquisar" />
+          <img src="./img/search-icon.svg" alt="icone de pesquisa" />
+        </div>
         <div>
           <input type="checkbox" name="favorites" id="favorites" />
           <label for="favorites">Mostrar meus filmes favoritos apenas</label>
@@ -28,52 +31,16 @@
             </div>
             <div class="movie-container">
               <p>Matrix (1999)</p>
-              <span>9.2</span>
-              <span>Favoritar</span>
-            </div>
-          </div>
-          <div class="movies-card-right">
-            <p>
-              Um hacker aprende com os misteriosos rebeldes sobre a verdadeira
-              natureza de sua realidade e seu papel na guerra contra seus
-              controladores.
-            </p>
-          </div>
-        </div>
-        <div class="movies-card">
-          <div class="movies-card-left">
-            <div class="img-container">
-              <img
-                src="https://br.web.img2.acsta.net/medias/nmedia/18/91/08/82/20128877.JPG"
-                alt=""
-              />
-            </div>
-            <div class="movie-container">
-              <p>Matrix (1999)</p>
-              <span>9.2</span>
-              <span>Favoritar</span>
-            </div>
-          </div>
-          <div class="movies-card-right">
-            <p>
-              Um hacker aprende com os misteriosos rebeldes sobre a verdadeira
-              natureza de sua realidade e seu papel na guerra contra seus
-              controladores.
-            </p>
-          </div>
-        </div>
-        <div class="movies-card">
-          <div class="movies-card-left">
-            <div class="img-container">
-              <img
-                src="https://br.web.img2.acsta.net/medias/nmedia/18/91/08/82/20128877.JPG"
-                alt=""
-              />
-            </div>
-            <div class="movie-container">
-              <p>Matrix (1999)</p>
-              <span>9.2</span>
-              <span>Favoritar</span>
+              <div class="rating-favorites">
+                <div class="rating">
+                  <img src="./img/star.png" alt="Starts" />
+                  <span>9.2</span>
+                </div>
+                <div class="favorites">
+                  <img src="./img/heart.svg" alt="Favoritar" />
+                  <span>Favoritar</span>
+                </div>
+              </div>
             </div>
           </div>
           <div class="movies-card-right">
