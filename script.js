@@ -1,24 +1,20 @@
 import { apiKey } from './apiKey.js';
 
 const moviesContainer = document.querySelector('.movies-container');
+const search = document.querySelector('#search');
+const input = document.querySelector('#input');
 
-window.onload = async function () {
-  const movies = await getMovies();
-  movies.forEach((movie) => renderMovie(movie));
-};
-
-async function getMovies() {
-  const url = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`;
-  const response = await fetch(url);
-  const { results } = await response.json();
-  return results;
-}
+// window.onload = async function () {
+//   const movies = await getMovies();
+//   movies.forEach((movie) => renderMovie(movie));
+// };
 
 function renderMovie(movie) {
   const { title, poster_path, vote_average, release_date, overview } = movie;
   const isFavorited = false;
 
   const year = new Date(release_date).getFullYear();
+  const image = `https://image.tmdb.org/t/p/original${poster_path}`;
 
   const moviesCard = document.createElement('div');
   moviesCard.classList.add('movies-card');
@@ -31,7 +27,7 @@ function renderMovie(movie) {
   const imgContainer = document.createElement('div');
   imgContainer.classList.add('img-container');
   const movieImg = document.createElement('img');
-  movieImg.src = `https://image.tmdb.org/t/p/original${poster_path}`;
+  movieImg.src = image;
   movieImg.alt = `${title} Poster`;
   moviesCardLeft.appendChild(imgContainer);
   imgContainer.appendChild(movieImg);
@@ -76,3 +72,25 @@ function renderMovie(movie) {
   moviesCardRight.appendChild(descriptionText);
   moviesCard.appendChild(moviesCardRight);
 }
+
+async function getMovies() {
+  const input = document.querySelector('#input').value;
+
+  const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${input}`;
+  const response = await fetch(url);
+  const { results } = await response.json();
+  return results;
+}
+
+async function searchMovies() {
+  const movies = await getMovies();
+  movies.forEach((movie) => renderMovie(movie));
+  document.querySelector('#input').value = '';
+}
+
+search.addEventListener('click', searchMovies);
+input.addEventListener('keydown', function (event) {
+  if (event.key === 'Enter') {
+    searchMovies();
+  }
+});
