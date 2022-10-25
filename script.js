@@ -8,6 +8,7 @@ search.addEventListener('click', searchMovies);
 input.addEventListener('keydown', function (event) {
   if (event.key === 'Enter') {
     searchMovies();
+    return;
   }
 });
 
@@ -41,14 +42,53 @@ async function getPopularMovies() {
   return results;
 }
 
+function favoriteButtonPressed(event, movie) {
+  const favoriteState = {
+    favorited: 'img/heart-fill.svg',
+    notFavorited: 'img/heart.svg'
+  };
+
+  if (event.target.src.includes(favoriteState.notFavorited)) {
+    event.target.src = favoriteState.favorited;
+    saveToLocalStorage(movie);
+  } else {
+    event.target.src = favoriteState.notFavorited;
+    removeFromLocalStorage(movie.id);
+  }
+}
+
+function getFavoriteMovies() {
+  return JSON.parse(localStorage.getItem('favoriteMovies'));
+}
+
+function saveToLocalStorage(movie) {
+  const movies = getFavoriteMovies() || [];
+  movies.push(movie);
+  const moviesJSON = JSON.stringify(movies);
+  localStorage.setItem('favoriteMovies', moviesJSON);
+}
+
+function checkMovieIsFavorited(id) {
+  const movies = getFavoriteMovies() || [];
+  return movies.find((movie) => movie.id == id);
+}
+
+function removeFromLocalStorage(id) {
+  const movies = getFavoritemovies() || [];
+  const findMovie = movies.find((movie) => movie.id == id);
+  const newMovies = movies.filter((movie) => movie.id != findMovie.id);
+  localStorage.setItem('favoriteMovies', JSON.stringify(newMovies));
+}
+
 window.onload = async function () {
   const movies = await getPopularMovies();
   movies.forEach((movie) => renderMovie(movie));
 };
 
 function renderMovie(movie) {
-  const { title, poster_path, vote_average, release_date, overview } = movie;
-  const isFavorited = false;
+  const { id, title, poster_path, vote_average, release_date, overview } =
+    movie;
+  const isFavorited = checkMovieIsFavorited(id);
 
   const year = new Date(release_date).getFullYear();
   const image = `https://image.tmdb.org/t/p/original${poster_path}`;
@@ -94,8 +134,12 @@ function renderMovie(movie) {
   favorites.classList.add('favorites');
   movieContainer.appendChild(favorites);
   const favoriteImg = document.createElement('img');
+  favoriteImg.classList.add('heart');
   favoriteImg.src = isFavorited ? 'img/heart-fill.svg' : 'img/heart.svg';
   favoriteImg.alt = 'Heart';
+  favoriteImg.addEventListener('click', (event) =>
+    favoriteButtonPressed(event, movie)
+  );
   const favoriteText = document.createElement('span');
   favoriteText.innerText = 'Favoritar';
   favorites.appendChild(favoriteImg);
@@ -109,3 +153,5 @@ function renderMovie(movie) {
   moviesCardRight.appendChild(descriptionText);
   moviesCard.appendChild(moviesCardRight);
 }
+
+const favorited = document.querySelector('.heart');
