@@ -3,6 +3,7 @@ import { apiKey } from './apiKey.js';
 const moviesContainer = document.querySelector('.movies-container');
 const search = document.querySelector('#search');
 const input = document.querySelector('#input');
+const checkbox = document.querySelector('#favorites');
 
 search.addEventListener('click', searchMovies);
 input.addEventListener('keydown', function (event) {
@@ -11,6 +12,7 @@ input.addEventListener('keydown', function (event) {
     return;
   }
 });
+checkbox.addEventListener('change', showFavorites);
 
 async function getMovies() {
   const inputValue = input.value;
@@ -74,10 +76,26 @@ function checkMovieIsFavorited(id) {
 }
 
 function removeFromLocalStorage(id) {
-  const movies = getFavoritemovies() || [];
+  const movies = getFavoriteMovies() || [];
   const findMovie = movies.find((movie) => movie.id == id);
   const newMovies = movies.filter((movie) => movie.id != findMovie.id);
   localStorage.setItem('favoriteMovies', JSON.stringify(newMovies));
+}
+
+async function returnPopularMovies() {
+  const movies = await getPopularMovies();
+  movies.forEach((movie) => renderMovie(movie));
+}
+
+function showFavorites() {
+  if (checkbox.checked) {
+    cleanAllMovies();
+    const movies = getFavoriteMovies();
+    movies.forEach((movie) => renderMovie(movie));
+  } else {
+    cleanAllMovies();
+    returnPopularMovies();
+  }
 }
 
 window.onload = async function () {
@@ -153,5 +171,3 @@ function renderMovie(movie) {
   moviesCardRight.appendChild(descriptionText);
   moviesCard.appendChild(moviesCardRight);
 }
-
-const favorited = document.querySelector('.heart');
